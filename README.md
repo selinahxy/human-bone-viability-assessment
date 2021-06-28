@@ -12,3 +12,8 @@ imageFeature.m is a modified version of GLCM_Features.m. It can go through a reg
 texture classifier 3class pca.py is the Python code of testing the K-means clustering classifier by grouped k-fold cross validation. The machine learning algorithms included are logistic regression, SVM, random forest, gradient boosting and KNN. It uses the first three principle components as predictors, clustering numbers as response variables, and patient ID as group index. After k iterations (k=3 here), it computes the average total accuracy, sensitivity of semi-normal group (cluster No.1) and compromised group (cluster No.3), as well as the standard deviations.
 
 rf classifier.py is the Python code of testing the FI classifier. It loads the testing dataset in .mat, and produces the computed response class according to logistic regression classifier by input FI predictors.
+
+Ref:
+[1] Pawel Kleczek (2021). GLCM_Features(glcm) (https://www.mathworks.com/matlabcentral/fileexchange/56661-glcm_features-glcm), MATLAB Central File Exchange. Retrieved June 28, 2021.
+[2] Avinash Uppuluri (2021). GLCM texture features (https://www.mathworks.com/matlabcentral/fileexchange/22187-glcm-texture-features), MATLAB Central File Exchange. Retrieved June 28, 2021.
+[3] Haralick RM, Shanmuga K, Dinstein I.: Textural features for image classification. IEEE Trans Syst Man Cybern 3: 610-621, 1973
