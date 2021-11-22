@@ -1,30 +1,37 @@
 import pandas, numpy
-import scipy.io
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsOneClassifier
+from sklearn.decomposition import PCA
 
 
 # import training dataset
-texture = pandas.read_csv('training 1featureMean 3classes TTP-TTP+120s withtime offset2 0312.csv')
+texture = pandas.read_csv('training footoff 20features 3classes 7patients round2 by DecisionOutlines TTP-TTP+120s withtime offset2nl256 1014.csv')
 array = texture.values
 # shuffle dataset
 numpy.random.shuffle(array)
 # select predictor variables
-x = array[:, 0]
-x = x.reshape(-1, 1)
+x = array[:, 0:20]
 # select response variables
-y = array[:, 3]
+y = array[:, 23]
+# principle component analysis
+pca = PCA(n_components=3)
+pca.fit(x)
+pc_train = pca.transform(x)
 
-# load testing dataset from .mat
-mat = scipy.io.loadmat('DHA007 icg02 TTP+120s test-FI.mat')
-print(sorted(mat.keys()))
-X_test = mat['Texture12']
-X_test = X_test.reshape(-1, 1)
+# load testing dataset
+texture_test = pandas.read_csv('testing A01-icg01 all pixels 20features 3classes by 7patients round2 3d Clustering weighted features TTP+110s offset2nl256 1014.csv')
+texture_test = texture_test.fillna(0)
+array_test = texture_test.values
+# shuffle dataset
+numpy.random.shuffle(array_test)
+# select predictor variables
+X_test = array_test[:, 0:20]
+pc_test = pca.transform(X_test)
 # logistic regression classifier
 log_class = LogisticRegression(solver='liblinear', C=1, random_state=0, penalty='l2')
 ovo_log = OneVsOneClassifier(log_class)
-ovo_log.fit(x, y)
-y_pred = ovo_log.predict(X_test)
+ovo_log.fit(pc_train, y)
+y_pred = ovo_log.predict(pc_test)
 # make and save resulting table
 resulttable = pandas.DataFrame(data=y_pred)
-resulttable.to_csv (r'C:\Users\f00349n\Desktop\Python Scripts\DHA007 icg02 TTP+120s FI-ypredict.csv', header=False)
+resulttable.to_csv (r'C:\Users\f00349n\Desktop\Python Scripts\DHA001 icg01 TTP+110s LG-ypredict.csv', header=False)
