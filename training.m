@@ -5,10 +5,10 @@ close all
 PRE_TIME = 10; %s - time before ICG injection (conservative estimate).
 
 % open DICOM stack
-[filename, pathname] = uigetfile('*.*', 'Pick the SPY Elite dicom containing the DCE-FI data','C:\Users\f00349n\Desktop\jaw osteoradionecrosis\patient study\016_BoneFI_20200227' );
+[filename, pathname] = uigetfile('*.*', 'Pick the SPY Elite dicom containing the DCE-FI data','C:\Users\f00349n\Desktop\jaw osteoradionecrosis\patient study\DHA007_20210422' );
 %     pathname = 'X:\#5 - Data\Human Bone Fracture DCE-FI\001_BoneFI_20190516_083500\01ICG_20190516_083500\';
 %     filename = '01ICG_20190516_SPY_FI';
-[rgb_file,~]=uigetfile('*.*', 'Pick the White light dicom containing the DCE-FI data','C:\Users\f00349n\Desktop\jaw osteoradionecrosis\patient study\016_BoneFI_20200227' );
+[rgb_file,~]=uigetfile('*.*', 'Pick the White light dicom containing the DCE-FI data','C:\Users\f00349n\Desktop\jaw osteoradionecrosis\patient study\DHA007_20210422' );
 
 % DICOM processing
 info = dicominfo( [pathname filename] );
@@ -47,13 +47,13 @@ for i = 1:Z
 end
 
 % select rectanglar region of interest
-imagesc(d.c.Q(:,:,500));
+imagesc(d.c.RGB);
 h0 = drawrectangle('StripeColor','k');
 h5 = drawrectangle; %select rectanglar region of background
 bw=createMask(h0);
 i=0;
 I=zeros(X,Y);
-startf=[178:345,358:1024];
+startf=[79:263,317:386,477:626,683:1024];
 
 % texture analysis on sub-ROIs within all useful frames
 for m=startf
@@ -114,9 +114,9 @@ for j=1:21
 end
 disp(i);
 end
-save('DHP016 0412 icg02 texture o2f21nl256sub20.mat','Texturedata1');
+save('DHA07 0916 icg03 texture o2f21nl256sub20 TTPtoEND.mat','Texturedata1');
 %% organize training dataset
-% import training dataset of three training patients (No.1~3)
+% import training dataset of seven training patients (No.1~7)
 P16_01=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\DHP0100\DHP016 0412 icg01 texture o2f21nl256sub20.mat');
 P16_02=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\DHP0100\DHP016 0412 icg02 texture o2f21nl256sub20.mat');
 P16_03=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\DHP0100\DHP016 0412 icg03 texture o2f21nl256sub20.mat');
@@ -127,6 +127,17 @@ P12_01=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study
 P12_02=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\DHP012\DHP012 0412 icg02 texture o2f21nl256sub20.mat');
 P12_03=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\DHP012\DHP012 0412 icg03 texture o2f21nl256sub20.mat');
 
+P13_02=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\New training\DHA09 0916 icg03 texture o2f21nl256sub20 TTPtoEND.mat');
+A01_01=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\New training\DHA07 0916 icg01 texture o2f21nl256sub20 TTPtoEND.mat');
+A01_02=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\New training\DHA07 0916 icg02 texture o2f21nl256sub20 TTPtoEND.mat');
+A01_03=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\New training\DHA07 0916 icg03 texture o2f21nl256sub20 TTPtoEND.mat');
+A08_01=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\New training\DHA08 0916 icg01 texture o2f21nl256sub20 TTPtoEND.mat');
+A08_02=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\New training\DHA08 0916 icg02 texture o2f21nl256sub20 TTPtoEND.mat');
+A08_03=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\New training\DHA08 0916 icg03 texture o2f21nl256sub20 TTPtoEND.mat');
+A10_01=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\New training\DHA10 0916 icg01 texture o2f21nl256sub20 TTPtoEND.mat');
+A10_02=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\New training\DHA10 0916 icg02 texture o2f21nl256sub20 TTPtoEND.mat');
+A10_03=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\classification data\New training\DHA10 0916 icg03 texture o2f21nl256sub20 TTPtoEND.mat');
+
 X101_0=concat(P10_01);
 X102_0=concat(P10_02);
 X103_0=concat(P10_03);
@@ -136,6 +147,17 @@ X123_0=concat(P12_03);
 X161_0=concat(P16_01);
 X162_0=concat(P16_02);
 X163_0=concat(P16_03);
+
+XP132_0=concat(P13_02);
+XA011_0=concat(A01_01);
+XA012_0=concat(A01_02);
+XA013_0=concat(A01_03);
+XA081_0=concat(A08_01);
+XA082_0=concat(A08_02);
+XA083_0=concat(A08_03);
+XA101_0=concat(A10_01);
+XA102_0=concat(A10_02);
+XA103_0=concat(A10_03);
 
 % add column of frame numbers
 f101=[repmat([1:size(P10_01,1)]',size(P10_01,3),1)];
@@ -148,6 +170,17 @@ f161=[repmat([1:size(P16_01,1)]',size(P16_01,3),1)];
 f162=[repmat([1:size(P16_02,1)]',size(P16_02,3),1)];
 f163=[repmat([1:size(P16_03,1)]',size(P16_03,3),1)];
 
+fP132=[repmat([1:size(P13_02,1)]',size(P13_02,3),1)];
+fA011=[repmat([1:size(A01_01,1)]',size(A01_01,3),1)];
+fA012=[repmat([1:size(A01_02,1)]',size(A01_02,3),1)];
+fA013=[repmat([1:size(A01_03,1)]',size(A01_03,3),1)];
+fA081=[repmat([1:size(A08_01,1)]',size(A08_01,3),1)];
+fA082=[repmat([1:size(A08_02,1)]',size(A08_02,3),1)];
+fA083=[repmat([1:size(A08_03,1)]',size(A08_03,3),1)];
+fA101=[repmat([1:size(A10_01,1)]',size(A10_01,3),1)];
+fA102=[repmat([1:size(A10_02,1)]',size(A10_02,3),1)];
+fA103=[repmat([1:size(A10_03,1)]',size(A10_03,3),1)];
+
 % add column of patient ID
 X101=[X101_0 repmat([10],size(X101_0,1),1) f101];
 X102=[X102_0 repmat([10],size(X102_0,1),1) f102];
@@ -158,6 +191,17 @@ X123=[X123_0 repmat([12],size(X123_0,1),1) f123];
 X161=[X161_0 repmat([16],size(X161_0,1),1) f161];
 X162=[X162_0 repmat([16],size(X162_0,1),1) f162];
 X163=[X163_0 repmat([16],size(X163_0,1),1) f163];
+
+XP132=[XP132_0 repmat([9],size(XP132_0,1),1) fP132];
+XA011=[XA011_0 repmat([7],size(XA011_0,1),1) fA011];
+XA012=[XA012_0 repmat([7],size(XA012_0,1),1) fA012];
+XA013=[XA013_0 repmat([7],size(XA013_0,1),1) fA013];
+XA081=[XA081_0 repmat([8],size(XA081_0,1),1) fA081];
+XA082=[XA082_0 repmat([8],size(XA082_0,1),1) fA082];
+XA083=[XA083_0 repmat([8],size(XA083_0,1),1) fA083];
+XA101=[XA101_0 repmat([1010],size(XA101_0,1),1) fA101];
+XA102=[XA102_0 repmat([1010],size(XA102_0,1),1) fA102];
+XA103=[XA103_0 repmat([1010],size(XA103_0,1),1) fA103];
 
 % select useful frames
 T101=X101(f101<=682&f101>=232,:);
@@ -170,72 +214,91 @@ T161=X161(f161<=669&f161>=219,:);
 T162=X162(f162<=652&f162>=202,:);
 T163=X163(f163<=500&f163>=209,:);
 
+TP132=XP132(fP132<=450,:);
+TA011=XA011(fA011<=450,:);
+TA012=XA012(fA012<=450,:);
+TA013=XA013(fA013<=450,:);
+TA081=XA081(fA081<=450,:);
+TA082=XA082(fA082<=450,:);
+TA083=XA083(fA083<=450,:);
+TA101=XA101(fA101<=450,:);
+TA102=XA102(fA102<=450,:);
+TA103=XA103(fA103<=450,:);
+
 T10=[T101(:,1:22) T101(:,23)-231;T102(:,1:22) T102(:,23)-241;T103(:,1:22) T103(:,23)-572];
 T12=[T121(:,1:22) T121(:,23)-189;T122(:,1:22) T122(:,23)-189;T123(:,1:22) T123(:,23)-189];
 T16=[T161(:,1:22) T161(:,23)-218;T162(:,1:22) T162(:,23)-201;T163(:,1:22) T163(:,23)-208];
+
+TP13=TP132;
+TA01=[TA011;TA012;TA013];
+TA08=[TA081;TA082;TA083];
+TA10=[TA101;TA102;TA103];
 
 % normalize feature max intensity to ranges [0,1]
 Norm10=[T10(:,1:20) normalize(T10(:,21),'range') T10(:,22:23)];
 Norm12=[T12(:,1:20) normalize(T12(:,21),'range') T12(:,22:23)];
 Norm16=[T16(:,1:20) normalize(T16(:,21),'range') T16(:,22:23)];
 
+NormP13=[TP13(:,1:20) normalize(TP13(:,21),'range') TP13(:,22:23)];
+NormA01=[TA01(:,1:20) normalize(TA01(:,21),'range') TA01(:,22:23)];
+NormA08=[TA08(:,1:20) normalize(TA08(:,21),'range') TA08(:,22:23)];
+NormA10=[TA10(:,1:20) normalize(TA10(:,21),'range') TA10(:,22:23)];
+
 save('training P10 21features noclasses nl256 offset2 TTP-TTP+120s.mat','Norm10');
 save('training P12 21features noclasses nl256 offset2 TTP-TTP+120s.mat','Norm12');
 save('training P16 21features noclasses nl256 offset2 TTP-TTP+120s.mat','Norm16');
 
-%% training dataset: single variable of fluorescence intensity 
-load('training P10 21features 3classes obviousROI norescale offset2 TTP-TTP+120s.mat')
-load('training P12 21features 3classes obviousROI norescale offset2 TTP-TTP+120s.mat')
-load('training P16 21features 3classes obviousROI norescale offset2 TTP-TTP+120s.mat')
-data=[T10(:,[14,22:24]);T12(:,[14,22:24]);T16(:,[14,22:24])];
-Cleanedtable=array2table(data,'VariableNames',{'Mean','ID','Frame','Class'});
-writetable(Cleanedtable,'training 1featureMean 3classes TTP-TTP+120s withtime offset2 0312.csv');
-%% PCA and K-means clustering
+save('training A09 21features noclasses nl256 offset2 TTP-TTP+120s.mat','NormP13');
+save('training A07 21features noclasses nl256 offset2 TTP-TTP+120s.mat','NormA01');
+save('training A08 21features noclasses nl256 offset2 TTP-TTP+120s.mat','NormA08');
+save('training A10 21features noclasses nl256 offset2 TTP-TTP+120s.mat','NormA10');
+
+%% PCA and kmeans clustering training with weighted pc
 % import organized training dataset
-fs_10=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\training P10 21features noclasses nl256 offset2 TTP-TTP+120s.mat');
-fs_12=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\training P12 21features noclasses nl256 offset2 TTP-TTP+120s.mat');
-fs_16=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\training P16 21features noclasses nl256 offset2 TTP-TTP+120s.mat');
+data1=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\training P16 21features 3classesByDecisionOutlines nl256 offset2 TTP-TTP+120s.mat');
+data2=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\training P12 21features 3classesByDecisionOutlines nl256 offset2 TTP-TTP+120s.mat');
+data3=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\training P13 21features 3classesByDecisionOutlines nl256 offset2 TTP-TTP+120s.mat');
+data4=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\training P10 21features 3classesByDecisionOutlines nl256 offset2 TTP-TTP+120s.mat');
+data5=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\training A08 21features 3classesByDecisionOutlines nl256 offset2 TTP-TTP+120s.mat');
+data6=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\training A09 21features 3classesByDecisionOutlines nl256 offset2 TTP-TTP+120s.mat');
+data7=importdata('C:\Users\f00349n\Desktop\matlab codes Bone DCE-FI Human Study\training A10 21features 3classesByDecisionOutlines nl256 offset2 TTP-TTP+120s.mat');
 
-% rescale each feature to range [0, 1]
-Texture=normalize([fs_10(:,1:20);fs_12(:,1:20);fs_16(:,1:20)],'range');
+% normalize every features to [0,1] from each patient individually
+Texture=[normalize(data1(:,1:20),'range');normalize(data2(:,1:20),'range');normalize(data3(:,1:20),'range');...
+    normalize(data4(:,1:20),'range');normalize(data5(:,1:20),'range');normalize(data6(:,1:20),'range');normalize(data7(:,1:20),'range')];
 
-% principle component analysis
+% principle component analysis (PCA)
 [coeff,score,~,~,explained,mu]=pca(Texture);
 Xcentered=score*coeff';
 
-% biplot of PCA results
-figure(1)
-vbls = {'contra','ener','sos','entro','homo','sa','se','sv','de','dv','imoc1',...
-    'imoc2','corre','mean','std','skew','kurt','IMcontra','gk','gp'}; % Labels for the variables
-biplot(coeff(:,1:3),'VarLabels',vbls);
-title('PCA t=TTP-TTP+120s')
-
-% k-means clustering
-X=score(:,1:3);
+% k-means clustering (k=3) on the top three PCs weighted by square root of
+% their percentages of total variance explained
+X=[score(:,1).*realsqrt(round(explained(1)/10)),score(:,2).*realsqrt(round(explained(2)/10)),...
+    score(:,3).*realsqrt(round(explained(3)/10))];
 opts = statset('Display','final');
-[idx,C] = kmeans(X,3,'Distance','cityblock',...
-    'Replicates',5,'Options',opts);
+[idx,C] = kmeans(X,3,'Replicates',5,'Options',opts);
 
-% 3D scatter plot of all data points under the three components
-figure(2)
+% 3D scatter plot of training data partitioned by k-means clustering:
+% Figure 4(b)
+figure(3)
 h1=scatter3(X(idx==1,1),X(idx==1,2),X(idx==1,3),36,'y.','MarkerFaceAlpha',.2,'MarkerEdgeAlpha',.2);
 hold on
 h2=scatter3(X(idx==2,1),X(idx==2,2),X(idx==2,3),36,'g.','MarkerFaceAlpha',.2,'MarkerEdgeAlpha',.2);
-h3=scatter3(X(idx==3,1),X(idx==3,2),X(idx==3,3),36,'r.','MarkerFaceAlpha',.2,'MarkerEdgeAlpha',.2);
+h4=scatter3(X(idx==3,1),X(idx==3,2),X(idx==3,3),36,'r.','MarkerFaceAlpha',.2,'MarkerEdgeAlpha',.2);
 scatter3(C(1,1),C(1,2),C(1,3),'kx','SizeData',15,'LineWidth',3) 
 scatter3(C(2,1),C(2,2),C(2,3),'kx','SizeData',15,'LineWidth',3)
 scatter3(C(3,1),C(3,2),C(3,3),'kx','SizeData',15,'LineWidth',3)
 hold off
 legend('Cluster 1','Cluster 2','Cluster 3',...
        'Location','NW')
-title 'Cluster Assignments t=TTP-TTP+120s'
-xlabel('Component 1')
-ylabel('Component 2')
-zlabel('Component 3')
+title ('Cluster Assignments t=TTP-TTP+120s')
+xlabel('Weighted Component 1')
+ylabel('Weighted Component 2')
+zlabel('Weighted Component 3')
 
 % save the data table and add the column of clustering number
-Cleaned=[[fs_10;fs_12;fs_16],idx];
+Cleaned=[[data1(:,1:23);data2(:,1:23);data3(:,1:23);data4(:,1:23);data5(:,1:23);data6(:,1:23);data7(:,1:23)],idx];
 Cleanedtable=array2table(Cleaned,'VariableNames',{'256-GC-Contrast','256-Energy','256-SumOfSquares','256-Entropy','256-Homogeneity','256-SumAverage',...
     '256-SumEntropy','256-SumVairance','256-DifferenceEntropy','256-DifferenceVariance','256-IMFCorrelation1','256-IMFCorrelation2','256-Correlation',...
     'Mean','STD','Skewness','Kurtosis','IM-Contrast','gamma-k','gamma-phi','Qmax','ID','Frame','Class'});
-writetable(Cleanedtable,'training 20features 3classes by 3d Clustering TTP-TTP+120s withtime offset2nl256 0328.csv');
+writetable(Cleanedtable,'training 20features 3classes 7patients round2 by 3d Clustering weighted features TTP-TTP+120s withtime offset2nl256 1014.csv');
